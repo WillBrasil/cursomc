@@ -13,6 +13,7 @@ import com.willianbrasil.cursomc.domain.Cidade;
 import com.willianbrasil.cursomc.domain.Cliente;
 import com.willianbrasil.cursomc.domain.Endereco;
 import com.willianbrasil.cursomc.domain.Estado;
+import com.willianbrasil.cursomc.domain.ItemPedido;
 import com.willianbrasil.cursomc.domain.Pagamento;
 import com.willianbrasil.cursomc.domain.PagamentoComBoleto;
 import com.willianbrasil.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.willianbrasil.cursomc.repositories.CidadeRepository;
 import com.willianbrasil.cursomc.repositories.ClienteRepository;
 import com.willianbrasil.cursomc.repositories.EnderecoRepository;
 import com.willianbrasil.cursomc.repositories.EstadoRepository;
+import com.willianbrasil.cursomc.repositories.ItemPedidoRepository;
 import com.willianbrasil.cursomc.repositories.PagamentoRepository;
 import com.willianbrasil.cursomc.repositories.PedidoRepository;
 import com.willianbrasil.cursomc.repositories.ProdutoRepository;
@@ -48,7 +50,8 @@ public class CursomcApplication implements CommandLineRunner {
 	private PagamentoRepository pagamentoRepository;
 	@Autowired
 	private PedidoRepository pedidoRepository;
-	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 
 	public static void main(String[] args) {
@@ -104,6 +107,7 @@ public class CursomcApplication implements CommandLineRunner {
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 		
+		
 		//REGISTRO DE PEDIDOS
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm"); 
 		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2020 10:32"), cli1, e1);
@@ -119,6 +123,24 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		
+		//REGISTRO DE ITENS DE PEDIDO
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+	    itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
+		
+	
 		
 		
 	}
